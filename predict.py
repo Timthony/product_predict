@@ -15,7 +15,7 @@ from sklearn.ensemble import GradientBoostingRegressor
 from netCDF4 import Dataset
 from sklearn import ensemble
 from sklearn import grid_search, datasets, svm, linear_model
-
+from sklearn import metrics
 
 SEED = 42
 
@@ -166,8 +166,7 @@ def cv_loop(x, y, model, N):
     on train set """
     mapes = 0
     for i in range(N):
-        x_train, x_cv, y_train, y_cv = train_test_split(
-            x, y, random_state=i*SEED)
+        x_train, x_cv, y_train, y_cv = train_test_split(x, y, random_state=i*SEED)
         model.fit(x_train, y_train)
         preds = model.predict(x_cv)
         preds = np.clip(preds, np.min(y_train), np.max(y_train))
@@ -233,11 +232,11 @@ def main():
 
     print("Shape of trainY: ", np.shape(train_y_all))
 
-    predictions_rf = run_random_forest(train_x_all, train_y_all, test_x_all)
+    #predictions_rf = run_random_forest(train_x_all, train_y_all, test_x_all)
 
-    predictions_svr = run_svr(train_x_all, train_y_all, test_x_all)
+    #predictions_svr = run_svr(train_x_all, train_y_all, test_x_all)
 
-    predictions_ridge = run_ridge(train_x_all, train_y_all, test_x_all)
+    #predictions_ridge = run_ridge(train_x_all, train_y_all, test_x_all)
 
     predictions_gbr = run_gbr(train_x_all, train_y_all, test_x_all)
 
@@ -250,11 +249,15 @@ def main():
         "subsample": 0.5
     }
 
-    model = GradientBoostingRegressor(parameters)
+    #model = GradientBoostingRegressor(parameters)
 
-    print("CV loop ", cv_loop(train_x_all, train_y_all[:, ], model, 10))
+    #print("CV loop ", cv_loop(train_x_all, train_y_all[:, ], model, 10))
 
+    #print('Predicting...')
+    #preds = model.predict(test_x_all)
 
+    print('Saving to csv...')
+    save_submission(predictions_gbr)
 
 
 
